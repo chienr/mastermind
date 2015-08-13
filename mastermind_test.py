@@ -1,23 +1,22 @@
-import unittest
 import mastermind
+import unittest
 
 class MasterMindGameTest(unittest.TestCase):
 
   def setUp(self):
     self.mm = mastermind.MasterMindGame()
-    
+
   def testGenerateCandidates(self):
-    candidates = self.mm.candidates
-    self.assertEqual(len(candidates), 1296)
+    self.assertEqual(len(self.mm.candidates), 1296)
 
   def testCandidatesNoDuplicates(self):
     candidates = self.mm.candidates
     # This takes O(n^2) time.
     self.assertFalse(any(candidates.count(c) > 1 for c in candidates))
-  
+
   def testCandidatesWithinRange(self):
     self.assertEqual(
-      filter(lambda i: 
+      filter(lambda i:
         filter(lambda j:
           j not in [1,2,3,4,5,6],
           i),
@@ -29,11 +28,11 @@ class MasterMindGameTest(unittest.TestCase):
     self.assertEqual(self.mm.Evaluate([1, 1, 2, 2], secret[:]), 'BW')
     self.assertEqual(self.mm.Evaluate([4, 3, 2, 1], secret[:]), 'WWWW')
     self.assertEqual(self.mm.Evaluate([1, 2, 3, 4], secret[:]), 'BBBB')
-    
+
   def testEvaluateRepeatingSecret(self):
     secret = [1, 1, 2, 3]
     self.assertEqual(self.mm.Evaluate([1, 2, 3, 4], secret[:]), 'BWW')
-  
+
   def testValidGuess(self):
     self.assertTrue(self.mm.IsValidGuess('1234'))
 

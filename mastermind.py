@@ -5,13 +5,16 @@ import sys
 
 
 class MasterMindGame(object):
-  
+
   def __init__(self):
     self.GenerateCandidates()
     self.secret = random.choice(self.candidates)
     self.tries = 1
-  
+
   def GenerateCandidates(self):
+    # For a 4-digit, 6-color game, there are a total of 1296 possible combos.
+    # Each candidate is stored as a list, in the form of e.g. [1, 1, 2, 3],
+    # with each digit between 1-6 representing one of the six colors.
     self.candidates = []
     for h in range(1, 7):
       for i in range(1, 7):
@@ -20,6 +23,9 @@ class MasterMindGame(object):
             self.candidates.append([h, i, j, k])
 
   def IsValidGuess(self, guess):
+    # Determines whether the guess is valid. Input 'guess' is a string.
+    # If input is invalid, returns False; otherwise, parses the string into 
+    # a list of digits, stores it with the object, and increments tries.
     if guess.lower() in ['quit', 'exit']:
       raise Exception('Exit requested.')
     if not guess.isdigit():
@@ -28,10 +34,12 @@ class MasterMindGame(object):
     if guess not in self.candidates:
       return False
     self.guess = guess
-    self.tries = self.tries + 1    
+    self.tries = self.tries + 1
     return True
-      
+
   def Evaluate(self, guess, secret):
+    # Given the guess and the secret, compute the correct number of (B)lack 
+    # and (W)hite pegs according to the standard MasterMind rules.
     pegs = ""
     for pos, val in enumerate(guess):
       if secret[pos] == val:
@@ -57,7 +65,7 @@ def main():
   try:
     while (1):
       mm = MasterMindGame()
-      print("\nGenerating new code... done.")
+      print("\nGenerated code for a new game.")
       while (1):
         guess = raw_input('Guess #%2d: ' % mm.tries)
         if not mm.IsValidGuess(guess):
